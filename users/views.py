@@ -7,6 +7,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from users import forms
 from django.contrib.auth import authenticate, login, logout
+from doctors.forms import DoctorsProfileForm
+from patients.forms import PatientsProfileForm
+from doctors.models import Doctors
+from patients.models import Patients
 
 
 def home(request):
@@ -14,11 +18,37 @@ def home(request):
 
 
 def profile(request):
-    return render(request, 'profile.html')
+
+    if request.user.type == "DOCTOR":
+        instance, created = Doctors.objects.get_or_create(user=request.user)
+
+        if request.method == 'POST':
+
+            form = DoctorsProfileForm(request.POST, instance=instance)
+            if form.is_valid():
+                form.save()
+        else:
+            form = DoctorsProfileForm(instance=instance)
+
+        return render(request, 'profile.html', {'form': form})
+
+    else:
+
+        instance, created = Patients.objects.get_or_create(user=request.user)
+
+        if request.method == 'POST':
+
+            form = PatientsProfileForm(request.POST, instance=instance)
+            if form.is_valid():
+                form.save()
+        else:
+            form = PatientsProfileForm(instance=instance)
+
+        return render(request, 'profile.html', {'form': form})
 
 
 def logout_view(request):
-    logout(request);
+    logout(request)
     return HttpResponseRedirect('/user/login')
 
 
@@ -46,10 +76,16 @@ def signup(request):
             form.save()
             username = form.cleaned_data.get('email')
             raw_password = form.cleaned_data.get('password1')
-            print(username,raw_password)
+            # print(username, raw_password)
             user = authenticate(username=username, password=raw_password)
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            return redirect('/')
+            if user.type == "DOCTOR":
+                bar = Doctors.objects.create(user=user)
+                bar.save()
+            else:
+                bar = Patients.objects.create(user=user)
+                bar.save()
+            return redirect('/user/profile/')
     else:
         form = forms.SignupForm()
     return render(request, 'signup.html', {'form': form})

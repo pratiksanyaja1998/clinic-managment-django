@@ -11,7 +11,8 @@ urlpatterns = [
     # url(r'^logout/$', auth_views.logout, name='logout'),
     # url(r'^admin/', admin.site.urls),
 
-    # path('login/', views.signin, name='login'),
+
+    path('appointments/', views.appointments, name='login'),
     # path('signup/', views.signup, name='signup'),
     # path('home/', views.home, name='home'),
     # path('logout/', auth_views.LogoutView.as_view(), name='logout-user'),

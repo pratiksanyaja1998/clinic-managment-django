@@ -1,9 +1,35 @@
 from django.shortcuts import render
+from doctors import models
+from doctors import forms
 
 
 def doctors(request):
-    return render(request, 'doctors.html')
+    doctors_list = models.Doctors.objects.all()
+    return render(request, 'doctors.html', {'doctors': doctors_list})
+
+
+def appointments_create(request, id):
+
+    if request.method == 'POST':
+        # if not request.POST._mutable:
+        #     request.GET._mutable = True
+        #
+        # request.POST['patients'] = request.user.pk
+        # request.POST['doctors'] = id
+        #
+        # request.POST._mutable = False  # make it False once edit done
+
+        form = forms.AppointmentsForm(request.POST)
+        if form.is_valid():
+            form.set_doctor(models.Doctors.objects.get(pk=id).user)
+            form.set_patients(request.user)
+            form.save()
+    else:
+        form = forms.AppointmentsForm()
+
+    return render(request, 'appointments_create.html', {'form': form})
 
 
 def appointments(request):
-    return render(request, 'appointments.html')
+    appointments_list = models.Appointments.objects.filter(doctors=request.user)
+    return render(request, 'appointments.html', {'appointments': appointments_list})

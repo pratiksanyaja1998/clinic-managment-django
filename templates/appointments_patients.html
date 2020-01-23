@@ -13,7 +13,7 @@
       <thead>
        <tr class="tr-head">
         <th>Sl.No</th>
-        <th>Patients Name</th>
+        <th>Doctor Name</th>
          <th>Time</th>
         <th>Accepted</th>
        </tr>
@@ -24,7 +24,7 @@
           {% for doc in appointments %}
       <tr class="tr-body">
         <td>{{forloop.counter}}</td>
-        <td>{{doc.patients.user.first_name}} {{doc.patients.user.last_name}}</td>
+        <td>{{doc.doctors.user.first_name}} {{doc.doctors.user.last_name}}</td>
         <td>{{doc.date}} {{doc.time}}</td>
         <td>{{doc.is_accepted}}</td>
 

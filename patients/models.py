@@ -13,4 +13,4 @@ class Patients(models.Model):
     age = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return str(self.user.username)
+        return str(self.user)
