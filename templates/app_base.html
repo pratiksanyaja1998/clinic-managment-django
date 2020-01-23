@@ -6,16 +6,21 @@
 <body>
   <header>
     {% if user.is_authenticated %}
-      Hi {{ user.username }}!
       <ul>
         <li>
-          <a href="/patients/doctors">doctors</a>
-          <a href="/doctors/appointments">appointments</a>
+          <a href="/user/profile"> {{ user.email }} profiles</a>
+          {% if user.type is 'PATIENT' %}
+            <a href="/doctors/">doctors</a>
+          {% else %}
+            <a href="/doctors/appointments/">appointments</a>
+          {% endif %}
+          <a href="/user/logout">logout</a>
         </li>
       </ul>
     {% else %}
     <ul>
         <li>
+          <a href="/">Home</a>
           <a href="/user/login">login</a>
           <a href="/user/signup">signup</a>
         </li>

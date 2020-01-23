@@ -1,7 +1,7 @@
 from django.urls import path, include
 from django.contrib import admin
 # from django.contrib.auth import views as auth_views
-from patients import views
+from doctors import views
 
 app_name = 'doctors'
 
@@ -11,7 +11,9 @@ urlpatterns = [
     # url(r'^logout/$', auth_views.logout, name='logout'),
     # url(r'^admin/', admin.site.urls),
 
-    # path('login/', views.signin, name='login'),
+    path('', views.doctors, name='doctors'),
+    path('appointments/', views.appointments, name='appointments'),
+
     # path('signup/', views.signup, name='signup'),
     # path('home/', views.home, name='home'),
     # path('logout/', auth_views.LogoutView.as_view(), name='logout-user'),

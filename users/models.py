@@ -47,7 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=False,
         help_text=_('Designates whether the user can log into this admin site.'),
     )
-    user_type = models.CharField(max_length=15, choices=USER_TYPE, default='PATIENT')
+    type = models.CharField(max_length=15, choices=USER_TYPE, default='PATIENT')
 
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 

@@ -17,6 +17,11 @@ def profile(request):
     return render(request, 'profile.html')
 
 
+def logout_view(request):
+    logout(request);
+    return HttpResponseRedirect('/user/login')
+
+
 def signin(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -24,10 +29,10 @@ def signin(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            if user.user_type == 'PATIENT':
-                return HttpResponseRedirect('/patients/doctor')
-            elif user.user_type == 'DOCTOR':
-                return HttpResponseRedirect('/doctors/appointments')
+            if user.type == 'PATIENT':
+                return HttpResponseRedirect('/doctors/')
+            elif user.type == 'DOCTOR':
+                return HttpResponseRedirect('/doctors/appointments/')
             # else:
             #     return HttpResponseRedirect('/user/profile')
 
@@ -39,11 +44,12 @@ def signup(request):
         form = forms.SignupForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
+            username = form.cleaned_data.get('email')
             raw_password = form.cleaned_data.get('password1')
+            print(username,raw_password)
             user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('/home')
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            return redirect('/')
     else:
         form = forms.SignupForm()
     return render(request, 'signup.html', {'form': form})
