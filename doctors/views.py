@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from doctors import models
 from doctors import forms
@@ -28,6 +29,20 @@ def appointments_create(request, id):
         form = forms.AppointmentsForm()
 
     return render(request, 'appointments_create.html', {'form': form})
+
+
+def appointments_accept(request, id):
+
+    appointments = models.Appointments.objects.get(pk=id)
+
+    if request.GET['accept'] == 'true':
+        appointments.is_accepted = True
+    else:
+        appointments.is_accepted = False
+
+    appointments.save()
+
+    return HttpResponseRedirect('/doctors/appointments/')
 
 
 def appointments(request):

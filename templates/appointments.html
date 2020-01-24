@@ -28,7 +28,14 @@
         <td>{{doc.patients.first_name}} {{doc.patients.last_name}}</td>
           <td>{{doc.patients.email}}</td>
         <td>{{doc.date}} {{doc.time}}</td>
-        <td>{{doc.is_accepted}}</td>
+        <td>
+
+            {% if doc.is_accepted %}
+                <a href="/doctors/appointments/{{doc.pk}}?accept=false">cancel</a>
+            {% else %}
+                <a href="/doctors/appointments/{{doc.pk}}?accept=true">accept</a>
+            {% endif %}
+        </td>
 
 <!--        <td><a href="/doctors/appointments/create/{{doc.pk}}" >select</a></td>-->
       </tr>
