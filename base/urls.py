@@ -24,6 +24,7 @@ urlpatterns = [
     path('user/', include('users.urls', namespace='users')),
     path('doctors/', include('doctors.urls', namespace='doctors')),
     path('patients/', include('patients.urls', namespace='patients')),
+    path('user/change/password/', views.change_password, name='change_password'),
 
     path('', views.home, name='home'),
 ]

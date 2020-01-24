@@ -11,6 +11,9 @@ from doctors.forms import DoctorsProfileForm
 from patients.forms import PatientsProfileForm
 from doctors.models import Doctors
 from patients.models import Patients
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 
 
 def home(request):
@@ -53,6 +56,7 @@ def logout_view(request):
 
 
 def signin(request):
+    messages = False
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -63,10 +67,27 @@ def signin(request):
                 return HttpResponseRedirect('/doctors/')
             elif user.type == 'DOCTOR':
                 return HttpResponseRedirect('/doctors/appointments/')
-            # else:
-            #     return HttpResponseRedirect('/user/profile')
+        else:
+            messages = 'check email or password'
 
-    return render(request, 'login.html')
+    return render(request, 'login.html', {"messages": messages})
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {
+        'form': form
+    })
 
 
 def signup(request):
