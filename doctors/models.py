@@ -21,7 +21,7 @@ class Appointments(models.Model):
     date = models.DateField(blank=True, null=True)
     time = models.TimeField(null=True, blank=True)
     is_accepted = models.BooleanField(default=None, null=True)
-    message = models.CharField(max_length=155, null=True)
+    message = models.TextField(null=True)
 
     def __str__(self):
         return str(self.doctors)
